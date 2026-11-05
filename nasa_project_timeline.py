@@ -62,15 +62,15 @@ def set_date():
     # Then removes spaces and reject if input has too many characters or has numbers.
     # Then combines year, month, and day values into one date string, which is returned.
     year = input("Enter the year (YYYY): ").strip()
-    if not year is.digit() or len(year) != 4:
+    if not year.isdigit() or len(year) != 4:
         print("Invalid year. Year will be set to default.")
         year = "2016"
     month = input("Enter the month (MM): ").strip()
-    if not month is.digit() or len(month) != 2:
+    if not month.isdigit() or len(month) != 2:
         print("Invalid month. Month will be set to default.")
         month = "03"
     day = input("Enter the day (DD): ").strip()
-    if not day is.digit() or len(day) != 2:
+    if not day.isdigit() or len(day) != 2:
         print("Invalid day. Day will be set to default.")
         day = "08"
     date = f"{year}-{month}-{day}"
