@@ -13,12 +13,12 @@ Return value:
 Returns a list of dictionaries of EPIC photo data (empty if no photos exist for that date) or None if the status code is not 200
 
 --------------------------------------------------------------------------------------------------------------
-Function 2: flightlog_create(photo)
-Description: Takes in the dictionary of the photo, searches it for relevant information (date, photo id, etc) and appends a "cleaned" version that consists of the time the photo was taken as well as a link to the photo into a new dictionary
+Function 2: flightlog_create(photos)
+Description: Takes in the dictionaries of the photos, searches them for relevant information (date, photo id, etc) and appends a "cleaned" version that consists of the time the photo was taken as well as a link to the photo into a new dictionary
 Parameters:
-photo (dictionary): the dictionary of the photo
+photos (dictionary): the dictionary of the photo dictionaries
 Return value:
-Nothing. The dictionary will be handled globally.
+The finished dictionary.
 
 --------------------------------------------------------------------------------------------------------------
 Function 3: set_date()
@@ -57,6 +57,7 @@ def retrieve_epic_photos(api_key, date):
     else:
         print(f"Data not received. Status code: {response.status_code}")
         return None
+        
 def set_date():
     # Takes the year, month and day from the user.
     # Then removes spaces and reject if input has too many characters or has numbers.
@@ -76,12 +77,39 @@ def set_date():
     date = f"{year}-{month}-{day}"
     return date
 
+def flightlog_create(photos):
+    # Creates empty dictionary 'flightlog'
+    # For every photo in the photos dictionary,
+    # it makes an entry in flightlog that is a dictionary of the photo's date and image
+    flightlog = {}
+    if photos:
+        for photo in photos:
+            flightlog[photo['identifier']] = {
+                "Date": photo['date'],
+                "Image": photo['image']
+            }
+    return flightlog
+
+def display_flightlog(flightlog):
+    if not flightlog:
+        print("Somehow, the flightlog is empty.")
+    else:
+        for identifier, photo in flightlog.items():
+            print(f"Photo ID: {identifier}\nTime taken: {photo['Date']}")
+            p_year = photo['Date'][0:4]
+            p_month = photo['Date'][5:7]
+            p_day = photo['Date'][8:10]
+            print(f"Link to photo: https://api.nasa.gov/EPIC/archive/natural/{p_year}/{p_month}/{p_day}/png/epic_1b_{identifier}.png?api_key=DEMO_KEY")
+
+
 if __name__ == "__main__":
 
-    date = "2016-03-08"
-    photos = retrieve_epic_photos("DEMO_KEY", date)
+    photos = retrieve_epic_photos("DEMO_KEY", "2017-09-27")
+    log = flightlog_create(photos)
+    display_flightlog(log)
 """
     if photos:
+        REMEMBER TO RE-ADD THIS FUNCTIONALITY !!!!!!!!!!!!!11
         print(f"Photos on this date: {len(photos)}")
         print()
         for photo in photos:
