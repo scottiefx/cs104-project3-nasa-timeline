@@ -43,7 +43,7 @@ def retrieve_epic_photos(api_key, date):
     params = {
         "api_key": api_key,
     }
-
+    # fetches photos from api
     response = requests.get(endpoint_url, params=params)
 
     if response.status_code == 200:
@@ -91,6 +91,11 @@ def flightlog_create(photos):
     return flightlog
 
 def display_flightlog(flightlog):
+    # Takes the inputted flightlog dictionary
+    # displays how many entries it has
+    # and lists each entry's identifier and Date values
+    # then creates a link to the photo
+    # using the api key, as well as the date created by set_date()
     if not flightlog:
         print("No photos taken on this date.")
     else:
@@ -101,7 +106,12 @@ def display_flightlog(flightlog):
             p_month = photo['Date'][5:7]
             p_day = photo['Date'][8:10]
             print(f"Link to photo: https://api.nasa.gov/EPIC/archive/natural/{p_year}/{p_month}/{p_day}/png/epic_1b_{identifier}.png?api_key={global_api_key}")
+
 def set_api_key():
+    # Prompts user, if they choose yes
+    # then they are prompted to enter their api key
+    # which is then used in display_flightlog and retrieve_epic_photos
+    # otherwise, use DEMO_KEY
     user_choice = input("Would you like to set a custom API key? (Y/N) ")
     if user_choice.lower().strip() == "y":
         key = input("Enter your key here: ").strip()
@@ -111,14 +121,17 @@ def set_api_key():
         key = "DEMO_KEY"
         return key
    
-
-
-
 if __name__ == "__main__":
+    #introduce program
     print("This program will search the EPIC API for satellite images taken on a specific day.")
+    #set the api key
     global_api_key = set_api_key()
+    #set the date with set_date()
     print("Please enter the day you wish to view:")
     user_date = set_date()
+    #create dictionary using the data gained from the api
     photos = retrieve_epic_photos(global_api_key, user_date)
+    #strip dictionary into a new one with specific key/values
     log = flightlog_create(photos)
+    #display information provided by new dictionary like time taken and link to view photo
     display_flightlog(log)
