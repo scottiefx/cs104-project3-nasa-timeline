@@ -92,29 +92,33 @@ def flightlog_create(photos):
 
 def display_flightlog(flightlog):
     if not flightlog:
-        print("Somehow, the flightlog is empty.")
+        print("No photos taken on this date.")
     else:
+        print(f"Photos on this date: {len(flightlog)}")
         for identifier, photo in flightlog.items():
             print(f"Photo ID: {identifier}\nTime taken: {photo['Date']}")
             p_year = photo['Date'][0:4]
             p_month = photo['Date'][5:7]
             p_day = photo['Date'][8:10]
-            print(f"Link to photo: https://api.nasa.gov/EPIC/archive/natural/{p_year}/{p_month}/{p_day}/png/epic_1b_{identifier}.png?api_key=DEMO_KEY")
+            print(f"Link to photo: https://api.nasa.gov/EPIC/archive/natural/{p_year}/{p_month}/{p_day}/png/epic_1b_{identifier}.png?api_key={global_api_key}")
+def set_api_key():
+    user_choice = input("Would you like to set a custom API key? (Y/N) ")
+    if user_choice.lower().strip() == "y":
+        key = input("Enter your key here: ").strip()
+        return key
+    else:
+        print("Demo API key will be used.")
+        key = "DEMO_KEY"
+        return key
+   
+
 
 
 if __name__ == "__main__":
-
-    photos = retrieve_epic_photos("DEMO_KEY", "2017-09-27")
+    print("This program will search the EPIC API for satellite images taken on a specific day.")
+    global_api_key = set_api_key()
+    print("Please enter the day you wish to view:")
+    user_date = set_date()
+    photos = retrieve_epic_photos(global_api_key, user_date)
     log = flightlog_create(photos)
     display_flightlog(log)
-"""
-    if photos:
-        REMEMBER TO RE-ADD THIS FUNCTIONALITY !!!!!!!!!!!!!11
-        print(f"Photos on this date: {len(photos)}")
-        print()
-        for photo in photos:
-            print(f"{photo}")
-    else:
-        print("No photos for this date.")
-"""
-
