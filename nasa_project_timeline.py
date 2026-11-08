@@ -36,6 +36,11 @@ flightlog(dictionary): the dictionary created by flightlog_create(photo)
 Return value:
 Nothing. This instead prints each of the entries in the created dictionary.
 --------------------------------------------------------------------------------------------------------------
+Function 5: set_api_key()
+Description: prompts the user to set an api key, uses DEMO_KEY by default if they dont.
+Parameters:
+Return value: the api key
+--------------------------------------------------------------------------------------------------------------
 """
 
 def retrieve_epic_photos(api_key, date):
@@ -127,7 +132,7 @@ if __name__ == "__main__":
     #set the api key
     global_api_key = set_api_key()
     #set the date with set_date()
-    print("Please enter the day you wish to view:")
+    print("Please enter the date you wish to view:")
     user_date = set_date()
     #create dictionary using the data gained from the api
     photos = retrieve_epic_photos(global_api_key, user_date)
